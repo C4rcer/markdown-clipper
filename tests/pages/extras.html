@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Edge cases</title>
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; margin: 24px; }
+    .hidden-by-class { display: none; }
+    table { border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 4px 10px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Edge cases <a class="anchor" href="#edge-cases">#</a></h1>
+  <p id="special">Special characters: 2 * 3 = 6, snake_case_name, a [bracket] and a back`tick.</p>
+  <p># not a heading</p>
+  <p>1. not a list</p>
+  <p>- not a bullet</p>
+  <p>Line one<br>line two</p>
+  <p>Non&nbsp;breaking space and a zero&#8203;width space.</p>
+
+  <h2>Links <a class="headerlink" href="#links">&para;</a></h2>
+  <p><a href="https://example.com/">https://example.com/</a> is an autolink, <a href="mailto:hi@example.com">mail</a> is kept, <a href="javascript:void(0)">script links</a> lose their target, <a href="#top">same-page</a> links become absolute, and <a href="/path with spaces/(1).html">odd paths</a> are encoded.<a href="https://example.com/empty"></a></p>
+  <a class="card" href="/cards/1"><h3>Card title</h3><p>Card text under the title.</p></a>
+
+  <h2>Lists</h2>
+  <ul><li>First</li><ul><li>Wrongly nested child</li></ul><li>Second<p>with a paragraph</p></li></ul>
+  <ul class="tasks"><li><input type="checkbox" checked disabled> Done task</li><li><input type="checkbox" disabled><label>Open task</label></li></ul>
+  <ol start="5"><li>Five</li><li>Six</li></ol>
+
+  <h2>Tables</h2>
+  <table id="nohead"><tr><td>Port</td><td>22</td></tr><tr><td>Protocol</td><td>a | b</td></tr></table>
+  <table id="spans">
+    <caption>Opening hours</caption>
+    <tr><th>Day</th><th>Open</th><th>Close</th></tr>
+    <tr><td>Mon</td><td colspan="2">Closed</td></tr>
+    <tr><td rowspan="2">Tue, Wed</td><td>9:00</td><td>17:00</td></tr>
+    <tr><td>10:00<br>(late start)</td><td>16:00</td></tr>
+  </table>
+  <table id="layout" role="presentation"><tr><td><p>Left column text.</p></td><td><p>Right column text.</p></td></tr></table>
+  <table id="single"><tr><td>Only one cell</td></tr></table>
+  <table id="outer"><tr><td><table id="inner"><tr><th>A</th><th>B</th></tr><tr><td>1</td><td>2</td></tr></table></td></tr></table>
+
+  <h2>Code</h2>
+  <pre><code class="lang-html">&lt;p&gt;Hello&lt;/p&gt;
+```
+fenced inside
+```</code></pre>
+  <pre>line one<br>line two</pre>
+  <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre>x = 1
+y = 2</pre></div></td></tr></table>
+  <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code>puts <span class="mi">1</span></code></pre></div></div>
+  <div class="highlight-python notranslate"><div class="highlight"><pre>print(<a href="/api/one">1</a>)</pre></div></div>
+  <div class="code-toolbar"><pre><code class="language-css">a { color: teal; }</code></pre><div class="toolbar"><span>CSS</span><button>Copy</button></div></div>
+  <p>Inline <code>a `tick` inside</code> code.</p>
+
+  <h2 id="other"><a href="#other">Other blocks</a></h2>
+  <h3>Wiki style <span class="mw-editsection">[<a href="/edit?section=1">edit</a>]</span></h3>
+  <dl><dt>Term</dt><dd>Its definition.</dd></dl>
+  <details><summary>More detail</summary><p>Hidden until opened.</p></details>
+  <iframe src="https://www.youtube.com/embed/abc123" title="Tide clock demo" width="200" height="100" loading="lazy"></iframe>
+  <iframe src="about:blank" data-kind="ad" width="10" height="10"></iframe>
+  <p><img src="data:image/png;base64,iVBORw0KGgo=" alt="inline data image"><img src="/pixel.gif" width="1" height="1" alt=""><img src="pic one.png" alt="A [bracketed]  alt"></p>
+  <p>Text with <q>inline quote</q> and <mark>marked</mark> words.</p>
+
+  <h2>Hidden</h2>
+  <p style="display:none">Inline-style hidden text.</p>
+  <p class="hidden-by-class">Class hidden text.</p>
+  <p hidden>Attribute hidden text.</p>
+  <div style="display:contents"><p>Shown through display contents.</p></div>
+  <form><input type="text" value="typed"><select><option>Pick</option></select><button>Send</button><textarea id="area">area text</textarea></form>
+  <script>window.ran = true;</script>
+  <noscript><p>Enable scripts.</p></noscript>
+</main>
+</body>
+</html>

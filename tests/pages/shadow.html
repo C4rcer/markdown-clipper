@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Shadow parts</title>
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; margin: 24px; max-width: 720px; }
+    .off { display: none; }
+  </style>
+</head>
+<body>
+<article>
+  <h1>Shadow parts</h1>
+  <p id="lead">Some sites build their pages out of components that keep their content in a shadow tree, out of reach of a plain copy of the page. This page has four of them, and a clip has to contain what a reader sees in each.</p>
+
+  <code-box id="code" class="brush: js"><template shadowrootmode="open"><style>.bar { display: flex; gap: 8px; } pre { background: #f3f3f6; padding: 10px; }</style><div class="bar"><span class="lang">js</span><button>Copy</button><a href="/play?code=1">Play</a></div><pre><code>const high = 12.42;
+const low = high / 2;</code></pre></template></code-box>
+
+  <p>A note whose label comes from the component and whose text comes from the page:</p>
+  <fancy-note id="note"><template shadowrootmode="open"><div class="note"><strong>Note:</strong> <slot></slot><span hidden> (internal)</span></div></template>Slotted <em>light</em> text.</fancy-note>
+
+  <code-box class="brush: css off"><template shadowrootmode="open"><pre><code>.never { shown: 0; }</code></pre></template></code-box>
+
+  <outer-wrap><template shadowrootmode="open"><section><inner-wrap><template shadowrootmode="closed"><blockquote><slot>Nothing passed in.</slot></blockquote></template><slot></slot></inner-wrap></section></template><p>Passed through two components, the inner one closed.</p></outer-wrap>
+
+  <p>And a last paragraph of ordinary text, so that there is enough of it around the components for the page to read like an article with a beginning and an end.</p>
+</article>
+</body>
+</html>

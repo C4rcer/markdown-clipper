@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Excerpt</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="../shared/support.css">
+</head>
+<body>
+  <header>
+    <span class="brand"><img src="../icons/icon.svg" alt="" width="18" height="18"> Excerpt</span>
+    <a class="support-pill" data-support title="Free forever, no ads, no tracking. Tips keep it maintained."><span class="heart">&#x2665;</span> Support</a>
+    <button id="btnOptions" class="icon-btn" title="Settings" aria-label="Settings">&#x2699;</button>
+  </header>
+  <main>
+    <div class="row">
+      <div class="seg" id="mode" role="radiogroup" aria-label="What to clip">
+        <button type="button" role="radio" data-mode="article" title="The readable article, without menus and sidebars">Article</button>
+        <button type="button" role="radio" data-mode="page" title="Everything visible on the page">Whole page</button>
+        <button type="button" role="radio" data-mode="selection" title="Only the text you selected on the page">Selection</button>
+      </div>
+      <label class="check" title="Put a block with the title, address and date at the top. Edit it in the settings."><input type="checkbox" id="frontMatter"> Front matter</label>
+    </div>
+
+    <p id="error" class="error" role="alert" hidden></p>
+    <p id="note" class="muted" hidden></p>
+
+    <textarea id="preview" class="mono" spellcheck="false" aria-label="Markdown preview. You can edit it before copying or saving." readonly></textarea>
+
+    <div class="row meta">
+      <span id="count" class="muted"></span>
+      <span id="file" class="muted mono" title="Name of the file that Save creates"></span>
+    </div>
+
+    <div class="actions">
+      <button id="copy" class="primary" type="button" disabled>Copy Markdown</button>
+      <button id="save" class="secondary" type="button" disabled>Save .md file</button>
+    </div>
+
+    <p id="hint" class="muted" hidden>Without this popup: right-click a page or a selection, or press <kbd id="shortcut"></kbd>.</p>
+
+    <div id="supportCard" hidden></div>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="../shared/settings.js"></script>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

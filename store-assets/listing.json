@@ -1,0 +1,24 @@
+{
+  "slug": "excerpt-markdown-web-clipper",
+  "name": "Excerpt: Markdown Web Clipper",
+  "summary": "Clip any article, or just the text you select, to clean Markdown. Copy it or save a .md file, with optional front matter for Obsidian and other note apps. No access to your sites until you click. Free, no ads, no tracking.",
+  "description": "Excerpt turns the page you are reading into clean Markdown: the article without the menus, ads and sidebars, or only the part you selected. Copy it to the clipboard or save it as a .md file, ready for your notes, your docs or an AI chat.\n\n**Clip**\n- The readable article of the current page, found with the same engine as Firefox Reader View\n- Just your selection: a few words, a code block, some rows of a table or half the page\n- The whole visible page, when you want everything\n- Headings, nested lists, task lists, links, images, quotes, tables and code blocks with their language come through as proper Markdown\n- Also reads what sits inside web components (shadow DOM), which a plain copy of a page misses\n\n**Copy or save**\n- A preview you can edit before you copy or save\n- Copy to the clipboard, or save a .md file named after the page, with a name that is safe on every system\n- Right-click a page or a selection and choose \"Clip ... as Markdown\", or press Alt+Shift+M: no popup needed (you can change the shortcut in Firefox's \"Manage Extension Shortcuts\")\n\n**Make it yours**\n- Optional front matter with title, source address and date, as a template you can edit: clips drop straight into Obsidian and other note apps as notes with properties\n- Heading style, bullet character, links in the text or numbered at the end, images on or off\n\n**Free, for real**\nEvery feature is unlocked for everyone. No ads, no account, no analytics. Everything happens in your browser; nothing you clip is sent anywhere.\n\nIf Excerpt saves you time and you'd like to say thanks, there's a Ko-fi link in the popup. It's entirely optional and unlocks nothing.\n\n**Permissions**\nExcerpt asks for no access to your websites when you install it. It can read a page only at the moment you click its button, its menu entry or its shortcut there.\n\n**Good to know**\n- Firefox doesn't let add-ons work on its own pages (about: pages, addons.mozilla.org, the built-in PDF viewer, Reader View), so Excerpt can't clip there\n- Images are not downloaded: the Markdown links to the picture on the web\n- Desktop Firefox only for now. Firefox for Android has no right-click menu and no keyboard shortcuts for add-ons, and Excerpt has not been tested there yet\n- Open source inside, unchanged: Mozilla Readability (Apache License 2.0) and Turndown (MIT License)",
+  "categories": {
+    "firefox": [
+      "feeds-news-blogging",
+      "web-development"
+    ]
+  },
+  "compatibility": [
+    "firefox"
+  ],
+  "license": "MPL-2.0",
+  "homepage": "",
+  "support_url": "",
+  "contributions_url": "https://ko-fi.com/carcer7378",
+  "screenshot_captions": {
+    "1-article.png": "One click turns the article into clean Markdown, with optional front matter. Copy it or save a .md file",
+    "2-selection.png": "Clip only what you select: headings, lists, tables and code keep their shape",
+    "3-options.png": "Choose your Markdown style and edit the front matter template for your notes app"
+  }
+}

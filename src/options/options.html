@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Excerpt settings</title>
+  <link rel="stylesheet" href="../popup/popup.css">
+  <link rel="stylesheet" href="../shared/support.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body class="options">
+  <div class="page">
+    <h1><img src="../icons/icon.svg" alt="" width="28" height="28"> Excerpt settings</h1>
+
+    <section class="card-block">
+      <h2>Markdown style</h2>
+
+      <h3 id="headingHead">Headings</h3>
+      <div class="choices" role="radiogroup" aria-labelledby="headingHead">
+        <label class="choice"><input type="radio" name="headingStyle" value="atx"><span class="choice-name">Hash marks</span><span class="choice-eg mono"># Title&nbsp;&nbsp;## Section</span></label>
+        <label class="choice"><input type="radio" name="headingStyle" value="setext"><span class="choice-name">Underlined</span><span class="choice-eg mono">Title, then ===== on the next line</span></label>
+      </div>
+
+      <h3 id="bulletHead">Bullet lists</h3>
+      <div class="choices three" role="radiogroup" aria-labelledby="bulletHead">
+        <label class="choice"><input type="radio" name="bullet" value="-"><span class="choice-eg mono">- item</span></label>
+        <label class="choice"><input type="radio" name="bullet" value="*"><span class="choice-eg mono">* item</span></label>
+        <label class="choice"><input type="radio" name="bullet" value="+"><span class="choice-eg mono">+ item</span></label>
+      </div>
+
+      <h3 id="linkHead">Links</h3>
+      <div class="choices" role="radiogroup" aria-labelledby="linkHead">
+        <label class="choice"><input type="radio" name="linkStyle" value="inline"><span class="choice-name">In the text</span><span class="choice-eg mono">[words](https://example.com)</span></label>
+        <label class="choice"><input type="radio" name="linkStyle" value="reference"><span class="choice-name">Numbered</span><span class="choice-eg mono">[words][1], addresses listed at the end</span></label>
+      </div>
+
+      <label class="check"><input type="checkbox" id="images"> Keep images <span class="muted">as links to the picture on the web</span></label>
+      <label class="check"><input type="checkbox" id="titleHeading"> Start with the page title as a heading</label>
+    </section>
+
+    <section class="card-block">
+      <h2>Front matter</h2>
+      <p class="muted">A block at the very top of each clip. Note apps such as Obsidian read it as the note's properties.</p>
+      <label class="check"><input type="checkbox" id="frontMatter"> Add front matter to every clip</label>
+      <textarea id="template" class="mono" rows="7" spellcheck="false" aria-label="Front matter template"></textarea>
+      <div class="row">
+        <span class="muted" id="templateState"></span>
+        <button id="templateReset" class="plain-btn" type="button">Reset to default</button>
+      </div>
+      <p class="muted">These are replaced when you clip:</p>
+      <dl id="placeholders" class="placeholders"></dl>
+      <p class="muted">Between the two <span class="mono">---</span> lines, a value with quotes or a colon in it is quoted for you, so the block stays valid.</p>
+    </section>
+
+    <section class="card-block">
+      <h2>Right-click menu and shortcut</h2>
+      <p class="muted">Right-click a page or a selection and choose "Clip ... as Markdown", or press <kbd id="shortcut">not set</kbd>. With text selected, the shortcut clips the selection; otherwise the article.</p>
+      <div class="choices" role="radiogroup" aria-label="What the menu and the shortcut do">
+        <label class="choice"><input type="radio" name="quickAction" value="copy"><span class="choice-name">Copy</span><span class="choice-eg">The Markdown goes to the clipboard</span></label>
+        <label class="choice"><input type="radio" name="quickAction" value="save"><span class="choice-name">Save</span><span class="choice-eg">A .md file named after the page goes to your downloads</span></label>
+      </div>
+      <p class="muted">To change the shortcut, open Firefox's Add-ons and themes page (Ctrl+Shift+A), click the gear at the top and choose "Manage Extension Shortcuts".</p>
+    </section>
+
+    <section class="card-block">
+      <h2>Privacy</h2>
+      <p class="muted">Excerpt reads a page only when you click its button, its menu entry or its shortcut there. The conversion happens inside Firefox on your device. Nothing is sent anywhere: no ads, no analytics, no account. Images stay where they are; the Markdown only links to them.</p>
+    </section>
+
+    <section class="card-block">
+      <h2>Support</h2>
+      <p>Excerpt is free, has no ads and collects no data. If it saves you time, a tip on Ko-fi keeps it maintained.</p>
+      <a class="support-pill" data-support><span class="heart">&#x2665;</span> Support on Ko-fi</a>
+    </section>
+
+    <section class="card-block">
+      <h2>Open source inside</h2>
+      <p class="muted">Excerpt finds the article with Mozilla's Readability (Apache License 2.0) and writes the Markdown with Turndown (MIT License). Both ship unchanged inside the add-on, with their license texts.</p>
+    </section>
+  </div>
+  <script src="../shared/settings.js"></script>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

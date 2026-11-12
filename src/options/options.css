@@ -1,0 +1,27 @@
+/* Options page. Colors and the support pill come from popup.css / support.css. */
+body.options { width: auto; min-height: 100vh; font-size: 14px; }
+.page { max-width: 660px; margin: 0 auto; padding: 28px 20px 48px; display: flex; flex-direction: column; gap: 14px; }
+h1 { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font-size: 22px; }
+h2 { margin: 0 0 2px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h3 { margin: 6px 0 0; font-size: 13px; font-weight: 650; }
+.card-block { display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg2); }
+.card-block p { margin: 0; }
+.card-block .muted { font-size: 13px; }
+.card-block .support-pill { align-self: flex-start; }
+.choices { display: flex; flex-direction: column; gap: 6px; }
+.choices.three { flex-direction: row; }
+.choices.three .choice { flex: 1; }
+.choice { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg); cursor: pointer; }
+.choice:has(input:checked) { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.choice input { accent-color: var(--accent); margin: 0; }
+.choice-name { flex: none; width: 92px; font-weight: 650; }
+.choice-eg { color: var(--muted); font-size: 13px; }
+.card-block .check { margin-top: 4px; white-space: normal; }
+#template { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg); color: var(--fg); font-size: 12.5px; line-height: 1.5; resize: vertical; }
+.placeholders { display: grid; grid-template-columns: max-content 1fr; gap: 3px 14px; margin: 0; font-size: 13px; }
+.placeholders dt { font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace; font-size: 12.5px; }
+.placeholders dd { margin: 0; color: var(--muted); }
+kbd { padding: 2px 8px; font-size: 12.5px; }
+.plain-btn { padding: 6px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--fg); cursor: pointer; }
+.plain-btn:hover { border-color: var(--accent); }
+.plain-btn:disabled { opacity: .55; cursor: default; }

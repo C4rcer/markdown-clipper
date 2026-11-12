@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>How Tidal Clocks Work | The Harbor Review</title>
+  <meta name="author" content="Mina Okafor">
+  <meta property="og:site_name" content="The Harbor Review">
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #fbfaf6; color: #1f2430; font: 15px/1.6 Georgia, "Times New Roman", serif; }
+    ::selection { background: #99e6dc; color: #10201e; }
+    header { display: flex; align-items: center; gap: 22px; padding: 12px 36px; background: #10343a; color: #e9f5f3; font: 13px/1 system-ui, sans-serif; }
+    header .logo { font: 700 17px/1 Georgia, serif; letter-spacing: .02em; margin-right: 12px; }
+    header a { color: #b9dcd6; text-decoration: none; }
+    header .sub { margin-left: auto; padding: 7px 14px; border-radius: 999px; background: #14b8a6; color: #06302c; font-weight: 700; }
+    .layout { display: flex; gap: 40px; padding: 26px 36px 60px; }
+    article { width: 500px; flex: none; }
+    aside { width: 230px; font: 13px/1.5 system-ui, sans-serif; color: #4b5563; padding-top: 6px; }
+    aside h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #6b7280; }
+    aside ul { margin: 0 0 22px; padding-left: 18px; }
+    aside .box { padding: 14px; border-radius: 10px; background: #e6f4f1; }
+    h1 { margin: 0 0 6px; font-size: 31px; line-height: 1.15; }
+    .byline { margin: 0 0 16px; color: #6b7280; font: 13px/1.4 system-ui, sans-serif; }
+    h2 { margin: 26px 0 8px; font-size: 21px; }
+    h3 { margin: 22px 0 8px; font-size: 17px; }
+    p { margin: 0 0 12px; }
+    a { color: #0f766e; }
+    ul, ol { margin: 0 0 12px; padding-left: 22px; }
+    figure { margin: 16px 0; }
+    figure img { display: block; width: 100%; height: auto; border-radius: 10px; }
+    figcaption { margin-top: 6px; color: #6b7280; font: 12.5px/1.4 system-ui, sans-serif; }
+    table { border-collapse: collapse; width: 100%; margin: 6px 0 16px; font: 13.5px/1.4 system-ui, sans-serif; }
+    th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #ddd8cc; }
+    th { background: #efece3; }
+    blockquote { margin: 14px 0; padding: 4px 16px; border-left: 4px solid #14b8a6; color: #374151; font-style: italic; }
+    pre { margin: 0 0 14px; padding: 12px 14px; border-radius: 10px; background: #10242a; color: #d9f2ee; font: 12.5px/1.5 ui-monospace, "Cascadia Mono", Consolas, monospace; overflow: hidden; }
+    code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .9em; }
+    p code { padding: 1px 5px; border-radius: 5px; background: #ece9df; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="logo">The Harbor Review</span>
+    <a href="/science">Science</a><a href="/coast">Coast</a><a href="/boats">Boats</a><a href="/weather">Weather</a>
+    <span class="sub">Subscribe</span>
+  </header>
+  <div class="layout">
+    <article id="post">
+      <h1>How Tidal Clocks Work</h1>
+      <p class="byline">By Mina Okafor &middot; 14 March 2026 &middot; 6 min read</p>
+      <p id="intro">A tide clock looks like a wall clock that lost a hand. It has <strong>one pointer</strong>, and that pointer ignores the sun completely: it follows the <em>moon</em>. One full turn takes 12 hours and 25 minutes, the average time between two high tides.</p>
+      <figure>
+        <img src="dial.svg" alt="A tide clock dial with one pointer near high tide" width="640" height="300">
+        <figcaption>The dial of a brass tide clock. Illustration: harbor archive.</figcaption>
+      </figure>
+      <h2 id="reading">Reading the dial</h2>
+      <p>The dial is split in two halves. On the way down the left side the water is falling, on the way up the right side it is rising:</p>
+      <ul>
+        <li>Pointer at the top: <strong>high tide</strong>.</li>
+        <li>Pointer at the bottom: low tide.</li>
+        <li>Halfway on either side: the current runs fastest.</li>
+      </ul>
+      <h3 id="drift">Why it drifts</h3>
+      <p>The sun adds its own, smaller tide. A clock that assumes a fixed interval is right on average and wrong in detail:</p>
+      <table id="drift-table">
+        <thead><tr><th>Moon phase</th><th>Tide type</th><th>Typical error</th></tr></thead>
+        <tbody>
+          <tr><td>New or full</td><td>Spring</td><td>under 10 min</td></tr>
+          <tr><td>First quarter</td><td>Neap</td><td>up to 60 min</td></tr>
+          <tr><td>Last quarter</td><td>Neap</td><td>up to 60 min</td></tr>
+        </tbody>
+      </table>
+      <blockquote id="quote"><p>Set it on the spring tide and forgive it on the neap.</p></blockquote>
+      <h2 id="code">Doing the sum yourself</h2>
+      <p>The pointer position is one line of arithmetic, built on a turn of <code>44714</code> seconds:</p>
+      <pre><code class="language-js">const TIDE_MS = 12.42 * 60 * 60 * 1000;
+
+function pointerAngle(now, lastHighTide) {
+  const phase = ((now - lastHighTide) % TIDE_MS) / TIDE_MS;
+  return phase * 360; // 0 = high tide, 180 = low tide
+}</code></pre>
+      <p>Tide clocks work best on coasts with two even tides a day, such as the Atlantic. Where the pattern is mixed, as on much of the Pacific coast, a printed <a href="/tables/2026">tide table</a> is still the better tool.</p>
+    </article>
+    <aside>
+      <h4>Related</h4>
+      <ul><li>Reading a barometer</li><li>Five knots worth knowing</li><li>The moon illusion</li></ul>
+      <div class="box"><strong>Get the newsletter</strong><br>One letter a week from the coast.</div>
+    </aside>
+  </div>
+</body>
+</html>

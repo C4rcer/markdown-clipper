@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="400" height="240">
+  <title>A drawing</title>
+  <rect width="100" height="60" fill="#0f766e"/>
+  <text x="10" y="35" fill="#ffffff" font-size="10">Not a web page</text>
+</svg>

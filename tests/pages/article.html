@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>How Tidal Clocks Work | The Harbor Review</title>
+  <meta name="author" content="Mina Okafor">
+  <meta name="description" content="A tide clock has one hand and no interest in the sun. Here is what it counts instead.">
+  <meta property="og:site_name" content="The Harbor Review">
+  <meta property="article:published_time" content="2026-03-14T08:30:00Z">
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; margin: 0; }
+    nav, footer { background: #223; color: #fff; padding: 12px 24px; }
+    nav a, footer a { color: #cde; margin-right: 16px; }
+    .layout { display: flex; gap: 32px; padding: 24px; }
+    article { max-width: 720px; }
+    aside { width: 240px; font-size: 14px; }
+    table { border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 4px 10px; }
+    pre { background: #f3f3f6; padding: 10px; }
+    .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: #ffd; padding: 10px; }
+  </style>
+</head>
+<body>
+  <nav id="topnav">
+    <a href="/">Home</a><a href="/science">Science</a><a href="/coast">Coast</a><a href="/subscribe">Subscribe</a>
+  </nav>
+  <div class="layout">
+    <article id="post">
+      <h1>How Tidal Clocks Work</h1>
+      <p class="byline">By <a rel="author" href="/authors/mina-okafor">Mina Okafor</a></p>
+
+      <p id="intro">A tide clock looks like a wall clock that lost a hand. It has <strong>one pointer</strong>, and that pointer ignores the sun completely: it follows the <em>moon</em>. One full turn takes 12 hours and 25 minutes, the average time between two high tides, as the <a href="/glossary#lunar-day">lunar day</a> is about 50 minutes longer than the solar one.</p>
+
+      <p>That single number is the whole trick. A quartz movement built for <code>44700</code> seconds per turn, instead of the usual 43200, keeps pace with the water for weeks. The <a href="https://tides.example.org/primer?station=4&amp;view=(full)">tide primer</a> from the harbor office explains why it drifts after that.</p>
+
+      <h2 id="reading">Reading the dial</h2>
+      <p>The dial is split in two halves. On the way down the left side the water is falling, on the way up the right side it is rising:</p>
+      <ul>
+        <li>Pointer at the top: <strong>high tide</strong>.</li>
+        <li>Pointer at the bottom: low tide.
+          <ul>
+            <li>The numbers count the hours <em>until</em> the next turn of the tide.</li>
+            <li>Most dials print them from 5 down to 1.</li>
+          </ul>
+        </li>
+        <li>Halfway on either side: the current runs fastest.</li>
+      </ul>
+
+      <h2 id="setting">Setting one up</h2>
+      <p>You only need a tide table and a little patience.</p>
+      <ol>
+        <li>Look up today's high tide for your harbor.</li>
+        <li>Wait for that moment, ideally near a full or new moon.
+          <ol>
+            <li>Put in a fresh battery.</li>
+            <li>Turn the pointer to <q>High Tide</q>.</li>
+          </ol>
+        </li>
+        <li>Check it again after a month.</li>
+      </ol>
+
+      <figure>
+        <img src="img/tide-clock-dial.png" alt="A tide clock dial with one pointer near high tide" width="640" height="400">
+        <figcaption>The dial of a brass tide clock. Photo: harbor archive.</figcaption>
+      </figure>
+
+      <h3 id="drift">Why it drifts</h3>
+      <p>The moon is not the only thing pulling. The sun adds its own, smaller tide, and the two fall in and out of step. A clock that assumes a fixed interval is right on average and wrong in detail:</p>
+
+      <table id="drift-table">
+        <thead>
+          <tr><th>Moon phase</th><th>Tide type</th><th>Typical error</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>New or full</td><td>Spring</td><td>under 10 min</td></tr>
+          <tr><td>First quarter</td><td>Neap</td><td>up to 60 min</td></tr>
+          <tr><td>Last quarter</td><td>Neap</td><td>up to 60 min</td></tr>
+        </tbody>
+      </table>
+
+      <blockquote id="quote">
+        <p>Set it on the spring tide and forgive it on the neap.</p>
+        <p>An old chandler's rule</p>
+      </blockquote>
+
+      <h2 id="code">Doing the sum yourself</h2>
+      <p>The pointer position is one line of arithmetic. In JavaScript:</p>
+      <pre><code class="language-js">const TIDE_MS = 12.42 * 60 * 60 * 1000;
+
+function pointerAngle(now, lastHighTide) {
+  const phase = ((now - lastHighTide) % TIDE_MS) / TIDE_MS;
+  return phase * 360; // 0 = high tide, 180 = low tide
+}</code></pre>
+      <p>The same in Python, as the harbor office publishes it:</p>
+      <div class="highlight highlight-source-python"><pre>TIDE_S = 44714
+
+def pointer_angle(now, last_high_tide):
+    return ((now - last_high_tide) % TIDE_S) / TIDE_S * 360</pre></div>
+      <p>And the constant on its own, with no language given:</p>
+      <pre>12 h 25 min 14 s</pre>
+
+      <hr>
+
+      <p>Tide clocks work best on coasts with two even tides a day, such as the Atlantic. Where the pattern is <del>simple</del> mixed, as on much of the Pacific coast, use a table. A <a href="downloads/tide-table-2026.pdf"><img src="/img/table-thumb.png" alt="Tide table for 2026"></a> is still the better tool there.</p>
+      <p><img alt="Moonrise over the harbor wall" data-src="img/lazy-moonrise.jpg" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></p>
+    </article>
+    <aside id="sidebar">
+      <h4>Related</h4>
+      <ul>
+        <li><a href="/coast/reading-a-barometer">Reading a barometer</a></li>
+        <li><a href="/coast/knots">Five knots worth knowing</a></li>
+        <li><a href="/science/moon-illusion">The moon illusion</a></li>
+      </ul>
+      <div class="newsletter"><strong>Get the newsletter</strong><form><input type="email" placeholder="you@example.com"><button>Sign up</button></form></div>
+    </aside>
+  </div>
+  <footer id="footer">
+    <a href="/about">About</a><a href="/privacy">Privacy</a><span>Copyright 2026 The Harbor Review</span>
+  </footer>
+  <div class="cookie-banner" id="cookie-banner">We use one cookie to remember this banner. <button>OK</button></div>
+</body>
+</html>
