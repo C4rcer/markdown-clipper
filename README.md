@@ -153,6 +153,7 @@ src/                       everything that ships
   options/                 Markdown style, front matter template, menu/shortcut action, support
   shared/settings.js       settings defaults and validation (classic script, used everywhere)
   shared/support.*         Ko-fi pill + one-time milestone card (from the template)
+  shared/more-addons.*     "More free add-ons" card + rate link (same file in every add-on; set `live: true` as listings are approved)
   vendor/                  Readability, Turndown and their licenses (unmodified)
 store-assets/listing.json  AMO listing text, categories, Ko-fi contributions_url, captions
 store-assets/screenshots/  1280x800 listing images (made by tests/screenshots.py)

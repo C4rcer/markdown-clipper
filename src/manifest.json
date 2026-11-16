@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Excerpt: Markdown Web Clipper",
   "short_name": "Excerpt",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Clip an article or a selection to clean Markdown. Copy it or save a .md file, with optional front matter. Free, no ads.",
   "browser_specific_settings": {
     "gecko": {

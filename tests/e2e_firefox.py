@@ -368,6 +368,7 @@ def session_main(unpacked, srv):
         wait(lambda: d.find_element(By.ID, "shortcut").text == "Alt+Shift+M", 4)
         check("options: shows the shortcut", d.find_element(By.ID, "shortcut").text == "Alt+Shift+M")
         check("options: has the Ko-fi link", d.find_element(By.CSS_SELECTOR, "a[data-support]").get_attribute("href") == KOFI)
+        check_more_addons(fx.api)
         checked = {n: d.find_element(By.CSS_SELECTOR, f'input[name="{n}"]:checked').get_attribute("value")
                    for n in ("headingStyle", "bullet", "linkStyle", "quickAction")}
         check("options: start at the defaults",
@@ -694,6 +695,51 @@ def session_idle(unpacked, srv):
 
 
 SESSIONS = {"main": session_main, "ask": session_ask, "idle": session_idle}
+
+
+def check_more_addons(api):
+    """Rate pill and "More free add-ons" card on the settings page that is open now.
+    The expected list comes from the shared file, so a new round only flips `live` flags."""
+    more = wait(lambda: api("""
+      const items = [...document.querySelectorAll('#moreAddons .more-item a')];
+      if (!items.length) return null;
+      const rate = document.querySelector('[data-rate]');
+      const all = document.querySelector('[data-more-all]');
+      const m = await import('/shared/more-addons.js');
+      const me = browser.runtime.id;
+      const self = m.ADDONS.find((a) => a.id === me);
+      const fake = [{id: 'a', live: true, android: false}, {id: 'b', live: true, android: true},
+                    {id: 'self', live: true, android: true}, {id: 'c', live: false, android: true}];
+      return {
+        names: items.map((a) => a.querySelector('.more-name').textContent),
+        expected: m.ADDONS.filter((a) => a.live && a.id !== me).map((a) => a.name),
+        left_out: m.ADDONS.filter((a) => !a.live || a.id === me).map((a) => a.name),
+        self_slug: self ? self.slug : null, self_live: self ? self.live : null,
+        hrefs: items.map((a) => a.href),
+        newTab: items.every((a) => a.target === '_blank' && a.rel === 'noopener'),
+        rate: rate.hidden ? null : rate.href, rateNewTab: rate.target === '_blank',
+        all: all.href,
+        androidPick: m.moreAddons('self', 'android', fake).map((x) => x.id),
+        desktopPick: m.moreAddons('self', 'win', fake).map((x) => x.id),
+      };
+    """))
+    more = more if isinstance(more, dict) else {}
+    check("this add-on is marked live in the shared add-on list", more.get("self_live") is True, more.get("self_slug"))
+    check("settings page lists every other live add-on, in order",
+          bool(more.get("names")) and more.get("names") == more.get("expected"), (more.get("names"), more.get("expected")))
+    check("it leaves out itself and add-ons still in review",
+          bool(more.get("names")) and not set(more["names"]) & set(more.get("left_out") or []), more.get("left_out"))
+    check("each listed add-on links to its AMO page in a new tab",
+          bool(more.get("hrefs")) and all(h.startswith("https://addons.mozilla.org/firefox/addon/") for h in more["hrefs"])
+          and more.get("newTab") is True, more.get("hrefs"))
+    check("rate link opens this add-on's own AMO page",
+          bool(more.get("self_slug")) and more.get("rate") == "https://addons.mozilla.org/firefox/addon/%s/" % more.get("self_slug")
+          and more.get("rateNewTab") is True, more.get("rate"))
+    check("see-all link opens the author's AMO page",
+          more.get("all") == "https://addons.mozilla.org/firefox/user/20013808/", more.get("all"))
+    check("list skips itself and unreleased add-ons, and desktop-only ones on Android",
+          more.get("desktopPick") == ["a", "b"] and more.get("androidPick") == ["b"],
+          (more.get("desktopPick"), more.get("androidPick")))
 
 
 def main():

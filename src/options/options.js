@@ -1,4 +1,5 @@
 import { wireSupportLinks } from "../shared/support.js";
+import { renderMoreAddons } from "../shared/more-addons.js";
 
 const Settings = globalThis.ExcerptSettings;
 const $ = (id) => document.getElementById(id);
@@ -25,6 +26,7 @@ function saveTemplate() {
 }
 
 wireSupportLinks();
+renderMoreAddons(document.getElementById("moreAddons")).catch(() => {});
 
 for (const [name, what] of Settings.PLACEHOLDERS) {
   const dt = document.createElement("dt");

@@ -6,6 +6,7 @@
   <title>Excerpt settings</title>
   <link rel="stylesheet" href="../popup/popup.css">
   <link rel="stylesheet" href="../shared/support.css">
+  <link rel="stylesheet" href="../shared/more-addons.css">
   <link rel="stylesheet" href="options.css">
 </head>
 <body class="options">
@@ -69,8 +70,18 @@
 
     <section class="card-block">
       <h2>Support</h2>
-      <p>Excerpt is free, has no ads and collects no data. If it saves you time, a tip on Ko-fi keeps it maintained.</p>
-      <a class="support-pill" data-support><span class="heart">&#x2665;</span> Support on Ko-fi</a>
+      <p>Excerpt is free, has no ads and collects no data. If it saves you time, a tip on Ko-fi keeps it maintained. A rating on Firefox Add-ons also helps other people find it.</p>
+      <div class="support-actions">
+        <a class="support-pill" data-support><span class="heart">&#x2665;</span> Support on Ko-fi</a>
+        <a class="rate-pill" data-rate><span class="star" aria-hidden="true">&#x2605;</span> Rate Excerpt on Firefox Add-ons</a>
+      </div>
+    </section>
+
+    <section class="card-block" id="moreAddons">
+      <h2>More free add-ons</h2>
+      <p class="muted">By the same developer, on the same terms: free, no ads, no tracking.</p>
+      <ul class="more-list" data-more-list></ul>
+      <a class="more-all" data-more-all>See them all on Firefox Add-ons</a>
     </section>
 
     <section class="card-block">
