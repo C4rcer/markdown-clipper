@@ -194,5 +194,5 @@ if (browser.commands) {
     clips = 0;
   }
   maybeShowMilestone($("supportCard"), clips, [25, 250], (m) =>
-    `You've clipped ${m} pages with Excerpt. It's free and ad-free; if it saves you time, a coffee keeps it maintained.`);
+    `You've clipped ${m} pages with Excerpt.`);
 })();

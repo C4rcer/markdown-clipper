@@ -369,6 +369,7 @@ def session_main(unpacked, srv):
         check("options: shows the shortcut", d.find_element(By.ID, "shortcut").text == "Alt+Shift+M")
         check("options: has the Ko-fi link", d.find_element(By.CSS_SELECTOR, "a[data-support]").get_attribute("href") == KOFI)
         check_more_addons(fx.api)
+        check_milestone_card(fx.api)
         checked = {n: d.find_element(By.CSS_SELECTOR, f'input[name="{n}"]:checked').get_attribute("value")
                    for n in ("headingStyle", "bullet", "linkStyle", "quickAction")}
         check("options: start at the defaults",
@@ -564,7 +565,9 @@ def session_main(unpacked, srv):
         card = d.find_element(By.ID, "supportCard")
         check("thank-you card: appears once 25 pages are clipped, inside the popup only",
               card.is_displayed() and "clipped 25 pages" in card.text, card.text[:60])
-        check("thank-you card: its link goes to Ko-fi", card.find_element(By.CSS_SELECTOR, "a[data-support]").get_attribute("href") == KOFI)
+        check("thank-you card: the first one asks for a rating, with a link to Excerpt's AMO page",
+              card.find_element(By.CSS_SELECTOR, "a[data-rate-ask]").get_attribute("href")
+              == "https://addons.mozilla.org/firefox/addon/excerpt-markdown-web-clipper/" and "rating on Firefox Add-ons" in card.text, card.text)
         [b for b in card.find_elements(By.CSS_SELECTOR, "button") if b.text == "Don't ask again"][0].click()
         check("thank-you card: Don't ask again is remembered", wait(lambda: (fx.store().get("supportNudge") or {}).get("optOut") is True, 3))
         fx.popup()
@@ -740,6 +743,90 @@ def check_more_addons(api):
     check("list skips itself and unreleased add-ons, and desktop-only ones on Android",
           more.get("desktopPick") == ["a", "b"] and more.get("androidPick") == ["b"],
           (more.get("desktopPick"), more.get("androidPick")))
+
+
+def check_milestone_card(api):
+    """The shared thank-you card, driven directly on the extension page that is open now:
+    the first card a user ever gets asks for a rating, later ones for a tip. Leaves storage as it found it."""
+    out = api("""
+      const m = await import('/shared/support.js');
+      const lists = await import('/shared/more-addons.js');
+      const self = lists.ADDONS.find((a) => a.id === browser.runtime.id);
+      const KEY = 'supportNudge';
+      const saved = (await browser.storage.local.get(KEY))[KEY];
+      const box = document.createElement('div');
+      document.body.append(box);
+      box.addEventListener('click', (e) => e.preventDefault(), true);  // a test click must not open AMO or Ko-fi
+      const fact = (n) => `Fact ${n}.`;
+      const stored = async () => (await browser.storage.local.get(KEY))[KEY];
+      const settle = async (pred) => {
+        for (let i = 0; i < 60; i++) {
+          const s = await stored();
+          if (s && pred(s)) return s;
+          await new Promise((r) => setTimeout(r, 50));
+        }
+        return (await stored()) || null;
+      };
+      const snap = () => {
+        const rate = box.querySelector('a[data-rate-ask]');
+        const tip = box.querySelector('a[data-support]');
+        return {
+          text: box.querySelector('p') ? box.querySelector('p').textContent : '',
+          rate: rate ? rate.href : null, rateLabel: rate ? rate.textContent.trim() : null,
+          rateNewTab: rate ? rate.target === '_blank' && rate.rel === 'noopener' : null,
+          tip: tip ? tip.href : null,
+          buttons: [...box.querySelectorAll('button')].map((b) => b.textContent),
+        };
+      };
+      const out = { slug: self ? self.slug : null, name: self ? self.name : null };
+      try {
+        await browser.storage.local.remove(KEY);
+        out.early = await m.maybeShowMilestone(box, 4, [5, 50], fact);
+        out.shown1 = await m.maybeShowMilestone(box, 5, [5, 50], fact);
+        out.first = snap();
+        box.querySelectorAll('button')[0].click();  // Not now
+        out.after1 = await settle((s) => (s.seen || []).includes(5));
+        out.hidden1 = box.hidden;
+        out.again = await m.maybeShowMilestone(box, 5, [5, 50], fact);
+        out.shown2 = await m.maybeShowMilestone(box, 50, [5, 50], fact);
+        out.second = snap();
+        box.querySelectorAll('button')[1].click();  // Don't ask again
+        out.after2 = await settle((s) => s.optOut === true);
+        out.afterOptOut = await m.maybeShowMilestone(box, 500, [5, 50, 500], fact);
+        // Someone who saw a tip card under an older version: no rating ask recorded yet.
+        await browser.storage.local.set({ [KEY]: { seen: [5], optOut: false } });
+        out.shown3 = await m.maybeShowMilestone(box, 50, [5, 50], fact);
+        out.third = snap();
+        const link = box.querySelector('a[data-rate-ask]');
+        if (link) link.click();
+        out.after3 = await settle((s) => s.rateAsked === true && (s.seen || []).includes(50));
+      } finally {
+        if (saved === undefined) await browser.storage.local.remove(KEY);
+        else await browser.storage.local.set({ [KEY]: saved });
+        box.remove();
+      }
+      return out;
+    """)
+    out = out if isinstance(out, dict) else {"error": out}
+    amo = "https://addons.mozilla.org/firefox/addon/%s/" % out.get("slug")
+    first, second, third = (out.get(k) or {} for k in ("first", "second", "third"))
+    check("thank-you card: nothing before the first milestone", out.get("early") is False, out.get("error") or out.get("early"))
+    check("thank-you card: the first one a user ever gets asks for a rating, not a tip",
+          out.get("shown1") is True and bool(out.get("slug")) and first.get("rate") == amo and first.get("rateNewTab") is True
+          and first.get("tip") is None and first.get("rateLabel") == "\u2605 Rate %s" % out.get("name")
+          and first.get("text") == "Fact 5. It's free, with no ads and no tracking. If it's useful to you, a rating on Firefox Add-ons helps other people find it."
+          and first.get("buttons") == ["Not now", "Don't ask again"], first)
+    check("thank-you card: 'Not now' closes it and that milestone never comes back",
+          out.get("hidden1") is True and 5 in ((out.get("after1") or {}).get("seen") or [])
+          and (out.get("after1") or {}).get("rateAsked") is True and out.get("again") is False, (out.get("after1"), out.get("again")))
+    check("thank-you card: the next milestone asks for a tip on Ko-fi",
+          out.get("shown2") is True and second.get("tip") == "https://ko-fi.com/carcer7378" and second.get("rate") is None
+          and second.get("text") == "Fact 50. It's free, with no ads and no tracking. If that's worth a coffee, tips keep it maintained.", second)
+    check("thank-you card: 'Don't ask again' is final",
+          (out.get("after2") or {}).get("optOut") is True and out.get("afterOptOut") is False, (out.get("after2"), out.get("afterOptOut")))
+    check("thank-you card: someone who saw a tip card under an older version is asked to rate once",
+          out.get("shown3") is True and third.get("rate") == amo and third.get("tip") is None
+          and (out.get("after3") or {}).get("rateAsked") is True and 50 in ((out.get("after3") or {}).get("seen") or []), (third, out.get("after3")))
 
 
 def main():

@@ -13,8 +13,8 @@
     "firefox"
   ],
   "license": "MPL-2.0",
-  "homepage": "",
-  "support_url": "",
+  "homepage": "https://github.com/C4rcer/markdown-clipper",
+  "support_url": "https://github.com/C4rcer/markdown-clipper/issues",
   "contributions_url": "https://ko-fi.com/carcer7378",
   "screenshot_captions": {
     "1-article.png": "One click turns the article into clean Markdown, with optional front matter. Copy it or save a .md file",

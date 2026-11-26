@@ -152,7 +152,7 @@ src/                       everything that ships
   popup/                   mode switch, editable preview, Copy, Save, front matter toggle
   options/                 Markdown style, front matter template, menu/shortcut action, support
   shared/settings.js       settings defaults and validation (classic script, used everywhere)
-  shared/support.*         Ko-fi pill + one-time milestone card (from the template)
+  shared/support.*         Ko-fi pill + one-time milestone card: a rating ask first, tips later (from the template)
   shared/more-addons.*     "More free add-ons" card + rate link (same file in every add-on; set `live: true` as listings are approved)
   vendor/                  Readability, Turndown and their licenses (unmodified)
 store-assets/listing.json  AMO listing text, categories, Ko-fi contributions_url, captions
